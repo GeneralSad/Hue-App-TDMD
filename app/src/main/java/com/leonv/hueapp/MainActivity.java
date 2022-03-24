@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             toggleButton.setText(R.string.TurnOff);
         }
-
+        this.lightViewModel.getSelectedLight().toggle();
     }
 
 }
