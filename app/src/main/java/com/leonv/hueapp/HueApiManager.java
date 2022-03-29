@@ -27,6 +27,7 @@ public class HueApiManager {
     private AppCompatActivity context;
     private RequestQueue requestQueue;
     private LightViewModel lightViewModel;
+    private String IP = "192.168.178.34:8000";
 
     public HueApiManager(AppCompatActivity appContext) {
         this.context = appContext;
@@ -136,7 +137,7 @@ public class HueApiManager {
 
     //Get the address
     private String getStartAdress() {
-        String adress = "http://" + "192.168.178.34:8000" + "/api/";
+        String adress = "http://" + this.IP + "/api/";
         return adress;
     }
 

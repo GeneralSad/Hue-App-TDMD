@@ -48,7 +48,6 @@ public class LampsFragment extends Fragment {
             recyclerView.setAdapter(itemRecyclerViewAdapter);
 
             this.lightViewModel.addUpdatedListener(itemRecyclerViewAdapter::notifyItemInserted);
-            this.lightViewModel.setListClearedListener(itemRecyclerViewAdapter::notifyDataSetChanged);
         }
 
         return view;

@@ -11,23 +11,14 @@ interface ItemAddedListener {
     void onLightsUpdated(int index);
 }
 
-interface ListClearedListener {
-    void onLightsCleared();
-}
-
 public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     private static final String LOGTAG = LightViewModel.class.getName();
 
     private MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
     private List<ItemAddedListener> listeners = new LinkedList<>();
-    private ListClearedListener listClearedListener;
     private LightManager lightManager = new LightManager();
     private MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
-
-    public void setListClearedListener(ListClearedListener listClearedListener) {
-        this.listClearedListener = listClearedListener;
-    }
 
     private void notifyUpdatedListeners(int index) {
         for (ItemAddedListener itemAddedListener : listeners) {
