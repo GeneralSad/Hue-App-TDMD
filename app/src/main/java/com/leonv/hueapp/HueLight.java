@@ -31,23 +31,13 @@ public class HueLight {
         return isOn;
     }
 
-    void setState(boolean isOn) {
-        this.hueApiManager.queueSetLightState(this, isOn);
-        this.isOn = isOn;
-    }
-
     void toggle() {
         this.isOn = !this.isOn;
         this.hueApiManager.queueSetLightState(this, this.isOn);
     }
 
-    HashMap<String, Integer> getColor() {
-        return this.color.getValuesHSBHashMap();
-    }
-
-    void setColor(int hue, int saturation, int brightness) {
-        this.color = new CustomColors(hue, saturation, brightness);
-        this.hueApiManager.queueSetLightColor(this, this.color);
+    int getColor() {
+        return this.color.getHexValue();
     }
 
     void setColor(CustomColors color) {

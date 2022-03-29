@@ -14,10 +14,6 @@ public class LightManager {
     public LightManager() {
     }
 
-//    public void connectToHub() {
-//        hueApiManager.queueGetLink();
-//    }
-
     public ArrayList<HueLight> getHueLights() {
         return this.hueLights;
     }
@@ -32,42 +28,8 @@ public class LightManager {
         }
     }
 
-//    public void toggleLight(HueLight light) {
-//        hueApiManager.queueSetLightState(light, !light.getState());
-//        light.setState(!light.getState());
-//    }
-
-//    public void toggleLights() {
-//        for (HueLight hueLight : this.hueLights) {
-//            hueApiManager.queueSetLightState(hueLight, !hueLight.getState());
-//            hueLight.setState(!hueLight.getState());
-//        }
-//    }
-
-//    public void setLightState(HueLight light, boolean state) {
-//        hueApiManager.queueSetLightState(light, state);
-//        light.setState(state);
-//    }
-
-//    public void setLightsState(boolean state) {
-//        for (HueLight hueLight : this.hueLights) {
-//            hueApiManager.queueSetLightState(hueLight, state);
-//            hueLight.setState(state);
-//        }
-//    }
-
-//    public void setLightColor(HueLight light, float hue, float saturation, float brightness) {
-//        setLightState(light, true);
-//        hueApiManager.queueSetLightColor(light, new CustomColors(hue, saturation, brightness));
-//        light.setColor(hue, saturation, brightness);
-//    }
-
-//    public void setLightsColor(float hue, float saturation, float brightness) {
-//        setLightsState(true);
-//        for (HueLight hueLight : this.hueLights) {
-//            hueApiManager.queueSetLightColor(hueLight, new CustomColors(hue, saturation, brightness));
-//            hueLight.setColor(hue, saturation, brightness);
-//        }
-//    }
+    public void clearHueLights() {
+        this.hueLights = new ArrayList<>();
+    }
 
 }

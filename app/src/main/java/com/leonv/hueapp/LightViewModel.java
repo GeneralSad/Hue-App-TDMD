@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
     private List<ItemAddedListener> listeners = new LinkedList<>();
     private ListClearedListener listClearedListener;
     private LightManager lightManager = new LightManager();
-    private MutableLiveData<Boolean> isLinkVisible = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
 
     public void setListClearedListener(ListClearedListener listClearedListener) {
         this.listClearedListener = listClearedListener;
@@ -44,12 +43,12 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
         return false;
     }
 
-    public MutableLiveData<Boolean> getIsLinkVisible() {
-        return this.isLinkVisible;
+    public MutableLiveData<Boolean> getIsLinked() {
+        return this.isLinked;
     }
 
-    public void setIsLinkVisible(boolean isLinkVisible) {
-        this.isLinkVisible.postValue(isLinkVisible);
+    public void setIsLinked(boolean isLinked) {
+        this.isLinked.postValue(isLinked);
     }
 
     public LiveData<HueLight> getSelected() {
@@ -63,6 +62,10 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
     public void addLight(HueLight hueLight) {
         lightManager.addHueLight(hueLight);
         notifyUpdatedListeners(lightManager.getHueLights().size());
+    }
+
+    public void clearLights() {
+        lightManager.clearHueLights();
     }
 
     public LightManager getLightManager() {

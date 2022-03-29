@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailFragment">
+    tools:context=".DetailFragment"
+    android:id="@+id/detailFragmentView">
 
     <TextView
         android:id="@+id/detailLampName"
@@ -29,8 +30,8 @@
         android:text="Pick color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailLampName"
-        android:onClick="onPickColorPressed"/>
+        app:layout_constraintTop_toBottomOf="@id/detailLampName"
+        />
 
     <TextView
         android:id="@+id/pickColorText"
@@ -40,7 +41,7 @@
         android:text="Picked color:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailPickColorButton" />
+        app:layout_constraintTop_toBottomOf="@id/detailPickColorButton" />
 
     <View
         android:id="@+id/colorPreview"
@@ -49,20 +50,8 @@
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pickColorText"
+        app:layout_constraintTop_toBottomOf="@id/pickColorText"
         android:layout_marginVertical="10dp"/>
-
-<!--    <Button-->
-<!--        android:id="@+id/detailSetLampColorButton"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Set Lamp Color"-->
-<!--        android:layout_marginHorizontal="100dp"-->
-<!--        android:layout_marginTop="40dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/ColorPreview"-->
-<!--        android:onClick="onSetLampColorPressed"/>-->
 
     <Button
         android:id="@+id/detailToggleLampButton"
@@ -73,7 +62,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorPreview"
+        app:layout_constraintTop_toBottomOf="@id/colorPreview"
         android:onClick="onToggleLampPressed"/>
 
 

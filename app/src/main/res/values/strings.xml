@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">HueApp</string>
     <string name="linkText">Link</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="unlinkText">Unlink</string>
     <string name="TurnOn">Turn On</string>
     <string name="TurnOff">Turn Off</string>
+    <string name="link_placeholder">Link placeholder</string>
 </resources>

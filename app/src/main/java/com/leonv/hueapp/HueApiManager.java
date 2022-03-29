@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
@@ -20,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HueApiManager {
 
@@ -77,13 +75,13 @@ public class HueApiManager {
 
                 JSONObject lights = response.getJSONObject("lights");
                 createHueLights(lights);
-                this.lightViewModel.setIsLinkVisible(false);
+                this.lightViewModel.setIsLinked(true);
             } catch (JSONException e) {
                 Log.d(LOGTAG, "getLightsRequest: " + e.getLocalizedMessage());
             }
         }, error -> {
             if (error.getLocalizedMessage() != null) {
-                this.lightViewModel.setIsLinkVisible(true);
+                this.lightViewModel.setIsLinked(false);
                 Log.e(LOGTAG, error.getLocalizedMessage());
             } else {
                 Log.e(LOGTAG, error.getMessage());
@@ -117,13 +115,23 @@ public class HueApiManager {
     private String getUsername() {
         SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
 
-        String username = sharedPref.getString("username", "");
-
-        if (username.trim().isEmpty()) {
-            Log.w(LOGTAG, "Username SharedPreference was empty");
+        if (!sharedPref.contains("username")) {
+            Log.w(LOGTAG, "Username SharedPreference was empty, try to link again");
         }
 
+        String username = sharedPref.getString("username", "");
+
         return username;
+    }
+
+    public void forgetUsername(){
+        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        sharedPref.edit().remove("username").apply();
+    }
+
+    public boolean isLinked(){
+        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        return sharedPref.contains("username");
     }
 
     //Get the address
@@ -137,8 +145,8 @@ public class HueApiManager {
         return getStartAdress() + getUsername();
     }
 
-    public void setLinkVisible(boolean isLinkVisible) {
-        this.lightViewModel.setIsLinkVisible(isLinkVisible);
+    public void setLinked(boolean isLinkVisible) {
+        this.lightViewModel.setIsLinked(isLinkVisible);
     }
 
     private void createHueLights(JSONObject lights) {
@@ -189,8 +197,7 @@ public class HueApiManager {
         final String url = getFullAddress() + "/lights/" + light.getID() + "/state";
         Log.d(LOGTAG, "SetLightsUrl: " + url);
 
-        return new CustomJsonArrayRequest(Request.Method.PUT, url,
-                requestData, response -> {
+        return new CustomJsonArrayRequest(Request.Method.PUT, url, requestData, response -> {
             Log.i(LOGTAG, "Set Light Response: " + response.toString());
         }, error -> {
             Log.e(LOGTAG, error.getLocalizedMessage());
@@ -223,9 +230,9 @@ public class HueApiManager {
     public void queueSetLightColor(HueLight light, CustomColors customColor) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("hue", customColor.getAPIHue());
-            jsonObject.put("sat", customColor.getAPISaturation());
-            jsonObject.put("bri", customColor.getAPIBrightness());
+            jsonObject.put("hue", customColor.getHue() >= 65536 ? 65535 : customColor.getHue());
+            jsonObject.put("sat", (customColor.getSaturation() >= 255 ? 254 : customColor.getSaturation()));
+            jsonObject.put("bri", (customColor.getBrightness() >= 255 ? 254 : customColor.getBrightness()));
         } catch (JSONException e) {
             Log.e(LOGTAG, e.getLocalizedMessage());
         }
