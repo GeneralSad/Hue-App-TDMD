@@ -11,14 +11,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder> {
+public class LightItemRecyclerViewAdapter extends RecyclerView.Adapter<LightItemRecyclerViewAdapter.ViewHolder> {
 
     private static final String LOGTAG = HueApiManager.class.getName();
 
     private final List<HueLight> hueLights;
     private OnItemClickListener onItemClickListener;
 
-    public ItemRecyclerViewAdapter(ArrayList<HueLight> items, OnItemClickListener onItemClickListener) {
+    public LightItemRecyclerViewAdapter(ArrayList<HueLight> items, OnItemClickListener onItemClickListener) {
         this.hueLights = items;
         this.onItemClickListener = onItemClickListener;
     }

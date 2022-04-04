@@ -60,6 +60,11 @@ public class HueApiManager {
         this.requestQueue.add(getLightsRequest());
     }
 
+    public void queueGetGroups()
+    {
+        this.requestQueue.add(getGroupsRequest());
+    }
+
     //Queue setLightState
     public void queueSetLightState(HueLight light, boolean state) {
         JSONObject jsonObject = new JSONObject();
@@ -138,6 +143,10 @@ public class HueApiManager {
 
                 JSONObject lights = response.getJSONObject("lights");
                 createHueLights(lights);
+
+                JSONObject groups = response.getJSONObject("groups");
+                createHueGroups(groups);
+
                 this.lightViewModel.setIsLinked(true);
             } catch (JSONException e) {
                 Log.d(LOGTAG, "getLightsRequest: " + e.getLocalizedMessage());
@@ -254,6 +263,69 @@ public class HueApiManager {
 
     }
 
+    //Request the lights
+    private JsonObjectRequest getGroupsRequest() {
+        final String url = getFullAddress() + "/groups";
+        Log.i(LOGTAG, "url: " + url);
+        return new JsonObjectRequest(
+                url, response -> {
+            try {
+                Log.i(LOGTAG, "getGroupsRequest: " + response.toString());
 
+                createHueGroups(response);
+                this.lightViewModel.setIsLinked(true);
+            } catch (Exception e) {
+                Log.d(LOGTAG, "getGroupsRequest: " + e.getLocalizedMessage());
+            }
+        }, error -> {
+            if (error.getLocalizedMessage() != null) {
+                this.lightViewModel.setIsLinked(false);
+                Log.e(LOGTAG, error.getLocalizedMessage());
+            } else {
+                Log.e(LOGTAG, error.getMessage());
+            }
+        });
+    }
+
+    private void createHueGroups(JSONObject groups) {
+
+        ArrayList<HueGroup> hueGroups = new ArrayList<>();
+
+        for (int i = 1; i <= groups.length(); i++) {
+
+            try {
+
+                String groupId = Integer.toString(i);
+
+                JSONObject group = groups.getJSONObject(groupId);
+                String groupName = group.getString("name");
+
+                JSONObject HSBValues = group.getJSONObject("action");
+                int hue = HSBValues.getInt("hue");
+                int saturation = HSBValues.getInt("sat");
+                int brightness = HSBValues.getInt("bri");
+                CustomColors customColor = new CustomColors();
+                customColor.setAPIValues(hue, saturation, brightness);
+
+                boolean isOn = HSBValues.getBoolean("on");
+
+                HueGroup hueGroup = new HueGroup(groupName, customColor, isOn);
+                hueGroups.add(hueGroup);
+
+                Log.d("group", groupName);
+
+            } catch (JSONException e) {
+                Log.e(LOGTAG, e.getLocalizedMessage());
+            }
+
+        }
+
+        lightViewModel.getGroupManager().setHueGroups(hueGroups);
+
+        for (HueGroup group : hueGroups) {
+            Log.i(LOGTAG, group.toString());
+        }
+
+    }
 
 }

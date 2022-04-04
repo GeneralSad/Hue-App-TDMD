@@ -102,6 +102,14 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
+        else if (item.getItemId() == R.id.action_groups) {
+
+            FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.mainFragment, GroupsFragment.class, null , "groupsFragment");
+            fragmentTransaction.commit();
+
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

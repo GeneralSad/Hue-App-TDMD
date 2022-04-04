@@ -18,6 +18,7 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
     private MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
     private List<ItemAddedListener> listeners = new LinkedList<>();
     private LightManager lightManager = new LightManager();
+    private GroupManager groupManager = new GroupManager();
     private MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
 
     private void notifyUpdatedListeners(int index) {
@@ -61,6 +62,11 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     public LightManager getLightManager() {
         return lightManager;
+    }
+
+    public GroupManager getGroupManager()
+    {
+        return groupManager;
     }
 
     @Override

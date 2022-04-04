@@ -7,4 +7,9 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_groups"
+        android:title="Group"
+        app:showAsAction="ifRoom" />
 </menu>
