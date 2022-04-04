@@ -27,13 +27,75 @@ public class HueApiManager {
     private AppCompatActivity context;
     private RequestQueue requestQueue;
     private LightViewModel lightViewModel;
-    private String IP = "192.168.178.34:8000";
+    private String IP;
 
     public HueApiManager(AppCompatActivity appContext) {
         this.context = appContext;
         this.requestQueue = Volley.newRequestQueue(this.context);
         this.lightViewModel = new ViewModelProvider(appContext).get(LightViewModel.class);
+        this.IP = getIPAddress();
     }
+
+    public boolean isLinked(){
+        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        return sharedPref.contains("username");
+    }
+
+    public void setLinked(boolean isLinkVisible) {
+        this.lightViewModel.setIsLinked(isLinkVisible);
+    }
+
+    public void unLink(){
+        forgetUserName();
+    }
+
+    //Queue getLinkRequest
+    public void queueGetLink() {
+        this.IP = getIPAddress();
+        this.requestQueue.add(getLinkRequest());
+    }
+
+    //Queue getLightsRequest
+    public void queueGetLights() {
+        this.requestQueue.add(getLightsRequest());
+    }
+
+    //Queue setLightState
+    public void queueSetLightState(HueLight light, boolean state) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("on", state);
+        } catch (JSONException e) {
+            Log.e(LOGTAG, e.getLocalizedMessage());
+        }
+        this.requestQueue.add(setLightRequest(light, jsonObject));
+    }
+
+    //Queue setLightColor
+    public void queueSetLightColor(HueLight light, CustomColors customColor) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("hue", customColor.getHue() >= 65536 ? 65535 : customColor.getHue());
+            jsonObject.put("sat", (customColor.getSaturation() >= 255 ? 254 : customColor.getSaturation()));
+            jsonObject.put("bri", (customColor.getBrightness() >= 255 ? 254 : customColor.getBrightness()));
+        } catch (JSONException e) {
+            Log.e(LOGTAG, e.getLocalizedMessage());
+        }
+        this.requestQueue.add(setLightRequest(light, jsonObject));
+    }
+
+    private String getIPAddress()
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPreferences.getString("IPAddress", "");
+    }
+
+    private void forgetUserName()
+    {
+        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        sharedPref.edit().remove("username").apply();
+    }
+
 
     //Setup the connection
     private CustomJsonArrayRequest getLinkRequest() {
@@ -125,16 +187,6 @@ public class HueApiManager {
         return username;
     }
 
-    public void forgetUsername(){
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
-        sharedPref.edit().remove("username").apply();
-    }
-
-    public boolean isLinked(){
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.contains("username");
-    }
-
     //Get the address
     private String getStartAdress() {
         String adress = "http://" + this.IP + "/api/";
@@ -144,10 +196,6 @@ public class HueApiManager {
     //Get the full address with username
     private String getFullAddress() {
         return getStartAdress() + getUsername();
-    }
-
-    public void setLinked(boolean isLinkVisible) {
-        this.lightViewModel.setIsLinked(isLinkVisible);
     }
 
     private void createHueLights(JSONObject lights) {
@@ -206,38 +254,6 @@ public class HueApiManager {
 
     }
 
-    //Queue getLinkRequest
-    public void queueGetLink() {
-        this.requestQueue.add(getLinkRequest());
-    }
 
-    //Queue getLightsRequest
-    public void queueGetLights() {
-        this.requestQueue.add(getLightsRequest());
-    }
-
-    //Queue setLightState
-    public void queueSetLightState(HueLight light, boolean state) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("on", state);
-        } catch (JSONException e) {
-            Log.e(LOGTAG, e.getLocalizedMessage());
-        }
-        this.requestQueue.add(setLightRequest(light, jsonObject));
-    }
-
-    //Queue setLightColor
-    public void queueSetLightColor(HueLight light, CustomColors customColor) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("hue", customColor.getHue() >= 65536 ? 65535 : customColor.getHue());
-            jsonObject.put("sat", (customColor.getSaturation() >= 255 ? 254 : customColor.getSaturation()));
-            jsonObject.put("bri", (customColor.getBrightness() >= 255 ? 254 : customColor.getBrightness()));
-        } catch (JSONException e) {
-            Log.e(LOGTAG, e.getLocalizedMessage());
-        }
-        this.requestQueue.add(setLightRequest(light, jsonObject));
-    }
 
 }

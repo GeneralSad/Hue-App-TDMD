@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (this.hueApiManager.isLinked()) {
             Log.i(LOGTAG, "Unlinking");
-            this.hueApiManager.forgetUsername();
+            this.hueApiManager.unLink();
             this.lightViewModel.clearLights();
             setLinkButton(false);
             transaction.replace(R.id.mainFragment, LampsFragment.class, null, "lampsFragment");
@@ -80,6 +83,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             button.setText(R.string.linkText);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+
+            FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.mainFragment, SettingsFragment.class, null , "settingsFragment");
+            fragmentTransaction.commit();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
