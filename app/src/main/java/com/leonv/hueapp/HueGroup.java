@@ -11,6 +11,13 @@ public class HueGroup {
         this.isOn = isOn;
     }
 
+    public HueGroup() {
+    }
+
+    public HueGroup(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

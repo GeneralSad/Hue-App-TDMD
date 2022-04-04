@@ -298,18 +298,24 @@ public class HueApiManager {
                 String groupId = Integer.toString(i);
 
                 JSONObject group = groups.getJSONObject(groupId);
+
+                HueGroup hueGroup = new HueGroup();
+
                 String groupName = group.getString("name");
+                hueGroup.setName(groupName);
 
-                JSONObject HSBValues = group.getJSONObject("action");
-                int hue = HSBValues.getInt("hue");
-                int saturation = HSBValues.getInt("sat");
-                int brightness = HSBValues.getInt("bri");
-                CustomColors customColor = new CustomColors();
-                customColor.setAPIValues(hue, saturation, brightness);
+                if(!group.isNull("action")) {
+                    JSONObject HSBValues = group.getJSONObject("action");
+                    int hue = HSBValues.getInt("hue");
+                    int saturation = HSBValues.getInt("sat");
+                    int brightness = HSBValues.getInt("bri");
+                    CustomColors customColor = new CustomColors();
+                    customColor.setAPIValues(hue, saturation, brightness);
+                    hueGroup.setColor(customColor);
 
-                boolean isOn = HSBValues.getBoolean("on");
-
-                HueGroup hueGroup = new HueGroup(groupName, customColor, isOn);
+                    boolean isOn = HSBValues.getBoolean("on");
+                    hueGroup.setOn(isOn);
+                }
                 hueGroups.add(hueGroup);
 
                 Log.d("group", groupName);

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.lightViewModel = new ViewModelProvider(this).get(LightViewModel.class);
         this.lightViewModel.getSelected().observe(this, this::pressedLight);
+        this.lightViewModel.getSelectedGroupLiveData().observe(this, this::pressedGroup);
 
         this.fragmentManager = getSupportFragmentManager();
 
@@ -51,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.mainFragment, DetailFragment.class, null , "detailFragment");
         fragmentTransaction.addToBackStack("detailFragment");
         fragmentTransaction.commit();
+    }
+
+    public void pressedGroup(HueGroup hueGroup) {
+        Log.i(LOGTAG, "Pressed " + hueGroup.getName());
+//        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.mainFragment, DetailFragment.class, null , "detailFragment");
+//        fragmentTransaction.addToBackStack("detailFragment");
+//        fragmentTransaction.commit();
     }
 
     public void linkButtonPressed(View view) {

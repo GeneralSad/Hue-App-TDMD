@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends Fragment implements OnItemClickListener{
 
     private LightViewModel lightViewModel;
 
@@ -32,12 +32,17 @@ public class GroupsFragment extends Fragment {
 
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            GroupItemRecyclerViewAdapter groupItemRecyclerViewAdapter = new GroupItemRecyclerViewAdapter(lightViewModel.getGroupManager().getHueGroups(), lightViewModel);
+            GroupItemRecyclerViewAdapter groupItemRecyclerViewAdapter = new GroupItemRecyclerViewAdapter(lightViewModel.getGroupManager().getHueGroups(), this);
             recyclerView.setAdapter(groupItemRecyclerViewAdapter);
 
 //            this.lightViewModel.addUpdatedListener(groupItemRecyclerViewAdapter::notifyItemInserted);
         }
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(int clickedPosition) {
+        this.lightViewModel.setSelectedGroup(this.lightViewModel.getGroupManager().getHueGroups().get(clickedPosition));
     }
 }

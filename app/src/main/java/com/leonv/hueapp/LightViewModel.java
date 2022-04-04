@@ -9,6 +9,7 @@ import java.util.List;
 
 interface ItemAddedListener {
     void onLightsUpdated(int index);
+//    default void onGroupsUpdated(int index){};
 }
 
 public class LightViewModel extends ViewModel implements OnItemClickListener {
@@ -16,6 +17,7 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
     private static final String LOGTAG = LightViewModel.class.getName();
 
     private MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
+    private MutableLiveData<HueGroup> selectedGroup = new MutableLiveData<>();
     private List<ItemAddedListener> listeners = new LinkedList<>();
     private LightManager lightManager = new LightManager();
     private GroupManager groupManager = new GroupManager();
@@ -49,6 +51,15 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     public HueLight getSelectedLight() {
         return this.selectedLight.getValue();
+    }
+
+    public void setSelectedGroup(HueGroup hueGroup) {
+        this.selectedGroup.setValue(hueGroup);
+    }
+
+    public LiveData<HueGroup> getSelectedGroupLiveData()
+    {
+        return this.selectedGroup;
     }
 
     public void addLight(HueLight hueLight) {
