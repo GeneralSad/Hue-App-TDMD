@@ -1,4 +1,4 @@
-package com.leonv.hueapp;
+package com.leonv.hueapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GroupsFragment extends Fragment implements OnItemClickListener{
+import com.leonv.hueapp.GroupItemRecyclerViewAdapter;
+import com.leonv.hueapp.LightViewModel;
+import com.leonv.hueapp.OnItemClickListener;
+import com.leonv.hueapp.R;
+
+public class GroupsFragment extends Fragment implements OnItemClickListener {
 
     private LightViewModel lightViewModel;
 

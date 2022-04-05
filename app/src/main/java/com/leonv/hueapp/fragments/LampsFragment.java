@@ -1,4 +1,4 @@
-package com.leonv.hueapp;
+package com.leonv.hueapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.leonv.hueapp.LightItemRecyclerViewAdapter;
+import com.leonv.hueapp.LightViewModel;
+import com.leonv.hueapp.R;
 
 public class LampsFragment extends Fragment {
 

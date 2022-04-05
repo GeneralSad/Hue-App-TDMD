@@ -1,4 +1,4 @@
-package com.leonv.hueapp;
+package com.leonv.hueapp.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,16 +13,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.leonv.hueapp.CustomColors;
+import com.leonv.hueapp.LightViewModel;
+import com.leonv.hueapp.R;
+
 import top.defaults.colorpicker.ColorPickerPopup;
 
-public class DetailFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class GroupDetailFragment extends Fragment {
 
-    private static final String LOGTAG = DetailFragment.class.getName();
+    private static final String LOGTAG = GroupDetailFragment.class.getName();
 
     private LightViewModel lightViewModel;
     private View fragmentView;
 
-    public DetailFragment() {
+    public GroupDetailFragment() {
     }
 
     public static DetailFragment newInstance() {
@@ -37,21 +45,24 @@ public class DetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.fragmentView = inflater.inflate(R.layout.fragment_detail, container, false);
+        this.fragmentView = inflater.inflate(R.layout.fragment_group_detail, container, false);
 
         this.lightViewModel = new ViewModelProvider(requireActivity()).get(LightViewModel.class);
 
-        this.fragmentView.findViewById(R.id.colorPreview).setBackgroundColor(this.lightViewModel.getSelectedLight().getColor());
+        CustomColors color = this.lightViewModel.getSelectedGroup().getColor();
+        if(color != null) {
+            this.fragmentView.findViewById(R.id.groupColorPreview).setBackgroundColor(color.getHexValue());
+        }
 
-        TextView lampName = fragmentView.findViewById(R.id.detailLampName);
-        lampName.setText(lightViewModel.getSelectedLight().getName());
+        TextView groupName = fragmentView.findViewById(R.id.detailGroupName);
+        groupName.setText(lightViewModel.getSelectedGroup().getName());
 
-        Button colorPickerButton = fragmentView.findViewById(R.id.detailPickColorButton);
+        Button colorPickerButton = fragmentView.findViewById(R.id.detailPickGroupColorButton);
         colorPickerButton.setOnClickListener(this::onPickColorPressed);
 
-        Button lightToggleButton = fragmentView.findViewById(R.id.detailToggleLampButton);
-        lightToggleButton.setText(lightViewModel.getSelectedLight().getState() ? R.string.TurnOff : R.string.TurnOn);
-        lightToggleButton.setOnClickListener(this::onToggleLampPressed);
+        Button groupToggleButton = fragmentView.findViewById(R.id.detailToggleGroupButton);
+        groupToggleButton.setText(lightViewModel.getSelectedGroup().isOn() ? R.string.TurnOff : R.string.TurnOn);
+        groupToggleButton.setOnClickListener(this::onToggleGroupPressed);
 
         return fragmentView;
     }
@@ -69,22 +80,21 @@ public class DetailFragment extends Fragment {
                     @Override
                     public void
                     onColorPicked(int color) {
-                        fragmentView.findViewById(R.id.colorPreview).setBackgroundColor(color);
-                        lightViewModel.getSelectedLight().setColor(new CustomColors(color));
+                        fragmentView.findViewById(R.id.groupColorPreview).setBackgroundColor(color);
+                        lightViewModel.getSelectedGroup().setColor(new CustomColors(color));
                         Log.i(LOGTAG, Integer.toHexString(color));
                         Log.i(LOGTAG, Integer.toBinaryString(color));
                     }
                 });
     }
 
-    public void onToggleLampPressed(View view) {
-        Button toggleButton = view.findViewById(R.id.detailToggleLampButton);
-        if (this.lightViewModel.getSelectedLight().getState()) {
+    public void onToggleGroupPressed(View view) {
+        Button toggleButton = view.findViewById(R.id.detailToggleGroupButton);
+        if (this.lightViewModel.getSelectedGroup().isOn()) {
             toggleButton.setText(R.string.TurnOn);
         } else {
             toggleButton.setText(R.string.TurnOff);
         }
-        this.lightViewModel.getSelectedLight().toggle();
+//        this.lightViewModel.getSelectedGroupLiveData().getValue().toggle();
     }
-
 }

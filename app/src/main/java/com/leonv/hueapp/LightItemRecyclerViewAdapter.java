@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LightItemRecyclerViewAdapter extends RecyclerView.Adapter<LightItemRecyclerViewAdapter.ViewHolder> {
 
-    private static final String LOGTAG = HueApiManager.class.getName();
+    private static final String LOGTAG = LightItemRecyclerViewAdapter.class.getName();
 
     private final List<HueLight> hueLights;
     private OnItemClickListener onItemClickListener;

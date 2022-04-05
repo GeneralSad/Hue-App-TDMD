@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class GroupManager {
 
-    private ArrayList<HueGroup> hueGroups = new ArrayList<>();
+    private final ArrayList<HueGroup> hueGroups = new ArrayList<>();
 
     public GroupManager() {
     }
@@ -14,6 +14,7 @@ public class GroupManager {
     }
 
     public void setHueGroups(ArrayList<HueGroup> hueGroups) {
+        this.hueGroups.clear();
         this.hueGroups.addAll(hueGroups);
     }
 

@@ -1,4 +1,4 @@
-package com.leonv.hueapp;
+package com.leonv.hueapp.fragments;
 
 import android.os.Bundle;
 
@@ -13,7 +13,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import com.leonv.hueapp.R;
+import com.leonv.hueapp.fragments.LampsFragment;
 
 /**
  * A simple {@link Fragment} subclass.

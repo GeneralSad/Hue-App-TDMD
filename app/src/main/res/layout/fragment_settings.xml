@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/settingsFragmentView"
-    tools:context=".SettingsFragment">
+    tools:context=".fragments.SettingsFragment">
 
     <TextView
         android:id="@+id/labelSettingsIpAddress"

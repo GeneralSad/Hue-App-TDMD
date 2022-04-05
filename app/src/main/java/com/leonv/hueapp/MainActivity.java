@@ -13,13 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.leonv.hueapp.fragments.DetailFragment;
+import com.leonv.hueapp.fragments.GroupDetailFragment;
+import com.leonv.hueapp.fragments.GroupsFragment;
+import com.leonv.hueapp.fragments.LampsFragment;
+import com.leonv.hueapp.fragments.SettingsFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private LightViewModel lightViewModel;
     private HueApiManager hueApiManager;
 
-    private static final String LOGTAG = HueApiManager.class.getName();
+    private static final String LOGTAG = MainActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void pressedGroup(HueGroup hueGroup) {
         Log.i(LOGTAG, "Pressed " + hueGroup.getName());
-//        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.mainFragment, DetailFragment.class, null , "detailFragment");
-//        fragmentTransaction.addToBackStack("detailFragment");
-//        fragmentTransaction.commit();
+        FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.mainFragment, GroupDetailFragment.class, null , "detailFragment");
+        fragmentTransaction.addToBackStack("detailFragment");
+        fragmentTransaction.commit();
     }
 
     public void linkButtonPressed(View view) {
@@ -107,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
             FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.mainFragment, SettingsFragment.class, null , "settingsFragment");
+            fragmentTransaction.addToBackStack("settingsFragment");
             fragmentTransaction.commit();
 
             return true;
@@ -115,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
             FragmentTransaction fragmentTransaction = this.fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.mainFragment, GroupsFragment.class, null , "groupsFragment");
+            fragmentTransaction.addToBackStack("groupsFragment");
             fragmentTransaction.commit();
 
             return true;

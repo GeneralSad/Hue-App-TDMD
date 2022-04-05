@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GroupItemRecyclerViewAdapter extends RecyclerView.Adapter<GroupItemRecyclerViewAdapter.ViewHolder> {
 
-    private static final String LOGTAG = HueApiManager.class.getName();
+    private static final String LOGTAG = GroupItemRecyclerViewAdapter.class.getName();
 
     private final List<HueGroup> hueGroups;
     private OnItemClickListener onItemClickListener;

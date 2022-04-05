@@ -19,28 +19,28 @@ public class HueLight {
         this.hueApiManager = hueApiManager;
     }
 
-    String getID() {
+    public String getID() {
         return this.id;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    boolean getState() {
+    public boolean getState() {
         return isOn;
     }
 
-    void toggle() {
+    public void toggle() {
         this.isOn = !this.isOn;
         this.hueApiManager.queueSetLightState(this, this.isOn);
     }
 
-    int getColor() {
+    public int getColor() {
         return this.color.getHexValue();
     }
 
-    void setColor(CustomColors color) {
+    public void setColor(CustomColors color) {
         this.color = color;
         this.hueApiManager.queueSetLightColor(this, this.color);
     }
