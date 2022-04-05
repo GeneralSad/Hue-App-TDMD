@@ -7,18 +7,19 @@ import androidx.lifecycle.ViewModel;
 import java.util.LinkedList;
 import java.util.List;
 
-interface ItemAddedListener {
-    void onLightsUpdated(int index);
-}
-
 public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     private static final String LOGTAG = LightViewModel.class.getName();
 
-    private MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
-    private List<ItemAddedListener> listeners = new LinkedList<>();
-    private LightManager lightManager = new LightManager();
-    private MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
+    private final MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
+    private final MutableLiveData<HueGroup> selectedGroup = new MutableLiveData<>();
+
+    private final List<ItemAddedListener> listeners = new LinkedList<>();
+
+    private final LightManager lightManager = new LightManager();
+    private final GroupManager groupManager = new GroupManager();
+
+    private final MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
 
     private void notifyUpdatedListeners(int index) {
         for (ItemAddedListener itemAddedListener : listeners) {
@@ -50,6 +51,20 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
         return this.selectedLight.getValue();
     }
 
+    public void setSelectedGroup(HueGroup hueGroup) {
+        this.selectedGroup.setValue(hueGroup);
+    }
+
+    public LiveData<HueGroup> getSelectedGroupLiveData()
+    {
+        return this.selectedGroup;
+    }
+
+    public HueGroup getSelectedGroup()
+    {
+        return this.selectedGroup.getValue();
+    }
+
     public void addLight(HueLight hueLight) {
         lightManager.addHueLight(hueLight);
         notifyUpdatedListeners(lightManager.getHueLights().size());
@@ -61,6 +76,11 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     public LightManager getLightManager() {
         return lightManager;
+    }
+
+    public GroupManager getGroupManager()
+    {
+        return groupManager;
     }
 
     @Override

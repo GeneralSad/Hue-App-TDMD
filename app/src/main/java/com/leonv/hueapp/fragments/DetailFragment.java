@@ -1,4 +1,4 @@
-package com.leonv.hueapp;
+package com.leonv.hueapp.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.leonv.hueapp.CustomColors;
+import com.leonv.hueapp.LightViewModel;
+import com.leonv.hueapp.R;
 
 import top.defaults.colorpicker.ColorPickerPopup;
 
@@ -57,8 +61,10 @@ public class DetailFragment extends Fragment {
     }
 
     public void onPickColorPressed(View view) {
+        int color = this.lightViewModel.getSelectedLight().getColor();
+
         new ColorPickerPopup.Builder(getContext())
-                .initialColor(Color.RED)
+                .initialColor(color)
                 .enableBrightness(true)
                 .okTitle("Choose")
                 .cancelTitle("Cancel")
