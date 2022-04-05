@@ -358,6 +358,14 @@ public class HueApiManager {
                 }
                 hueGroups.add(hueGroup);
 
+                if(!group.isNull("lights")){
+                    JSONArray lights = group.getJSONArray("lights");
+                    for(int j = 0; j < lights.length(); j++)
+                    {
+                        hueGroup.addHueLight(lights.getString(j));
+                    }
+                }
+
                 Log.d("group", groupName);
 
             } catch (JSONException e) {

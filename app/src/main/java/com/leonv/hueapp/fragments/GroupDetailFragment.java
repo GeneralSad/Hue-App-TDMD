@@ -83,8 +83,15 @@ public class GroupDetailFragment extends Fragment {
                     public void
                     onColorPicked(int color) {
                         fragmentView.findViewById(R.id.groupColorPreview).setBackgroundColor(color);
-                        lightViewModel.getSelectedGroup().setColor(new CustomColors(color));
-                        hueApiManager.queueSetGroupColor(lightViewModel.getSelectedGroup(), lightViewModel.getSelectedGroup().getColor());
+                        CustomColors customColors = new CustomColors(color);
+                        lightViewModel.getSelectedGroup().setColor(customColors);
+                        lightViewModel.getLightManager().getHueLights()
+                                .stream()
+                                .filter(x -> lightViewModel.getSelectedGroup().getHueLights().contains(x.getID()))
+                                .forEach(x -> x.setColor(customColors));
+
+                        hueApiManager.queueSetGroupColor(lightViewModel.getSelectedGroup(), customColors);
+
                         Log.i(LOGTAG, Integer.toHexString(color));
                         Log.i(LOGTAG, Integer.toBinaryString(color));
                     }
@@ -101,5 +108,9 @@ public class GroupDetailFragment extends Fragment {
         }
         this.lightViewModel.getSelectedGroup().setOn(!isOn);
         this.hueApiManager.queueSetGroupState(this.lightViewModel.getSelectedGroup(), !isOn);
+        lightViewModel.getLightManager().getHueLights()
+                .stream()
+                .filter(x -> lightViewModel.getSelectedGroup().getHueLights().contains(x.getID()))
+                .forEach(x -> x.setState(!isOn));
     }
 }

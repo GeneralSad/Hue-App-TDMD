@@ -31,6 +31,10 @@ public class HueLight {
         return isOn;
     }
 
+    public void setState(boolean state){
+        this.isOn = state;
+    }
+
     public void toggle() {
         this.isOn = !this.isOn;
         this.hueApiManager.queueSetLightState(this, this.isOn);
