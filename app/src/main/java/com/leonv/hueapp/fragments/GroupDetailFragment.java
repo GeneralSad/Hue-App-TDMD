@@ -70,8 +70,10 @@ public class GroupDetailFragment extends Fragment {
     }
 
     public void onPickColorPressed(View view) {
+        CustomColors color = this.lightViewModel.getSelectedGroup().getColor();
+
         new ColorPickerPopup.Builder(getContext())
-                .initialColor(Color.RED)
+                .initialColor(color.getHexValue())
                 .enableBrightness(true)
                 .okTitle("Choose")
                 .cancelTitle("Cancel")

@@ -61,8 +61,10 @@ public class DetailFragment extends Fragment {
     }
 
     public void onPickColorPressed(View view) {
+        int color = this.lightViewModel.getSelectedLight().getColor();
+
         new ColorPickerPopup.Builder(getContext())
-                .initialColor(Color.RED)
+                .initialColor(color)
                 .enableBrightness(true)
                 .okTitle("Choose")
                 .cancelTitle("Cancel")
