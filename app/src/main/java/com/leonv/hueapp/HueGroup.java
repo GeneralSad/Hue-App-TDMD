@@ -1,11 +1,14 @@
 package com.leonv.hueapp;
 
 public class HueGroup {
+
+    private String id;
     private String name;
     private CustomColors color;
     private boolean isOn;
 
-    public HueGroup(String name, CustomColors color, boolean isOn) {
+    public HueGroup(String id, String name, CustomColors color, boolean isOn) {
+        this.id = id;
         this.name = name;
         this.color = color;
         this.isOn = isOn;
@@ -14,8 +17,17 @@ public class HueGroup {
     public HueGroup() {
     }
 
-    public HueGroup(String name) {
+    public HueGroup(String id, String name) {
+        this.id = id;
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

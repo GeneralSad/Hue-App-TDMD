@@ -28,9 +28,9 @@ public class APIInstrumentedTest {
 
     @Test
     public void apigetLightsTest() {
-        HueApiManager hueApiManager = new HueApiManager(mainActivity.getActivity());
-        hueApiManager.queueGetLink();
         LightViewModel lightViewModel = new ViewModelProvider(mainActivity.getActivity()).get(LightViewModel.class);
+        HueApiManager hueApiManager = new HueApiManager(mainActivity.getActivity(), lightViewModel);
+        hueApiManager.queueGetLink();
 
         try {
             Thread.sleep(2000);

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.leonv.hueapp.CustomColors;
+import com.leonv.hueapp.HueApiManager;
 import com.leonv.hueapp.LightViewModel;
 import com.leonv.hueapp.R;
 
@@ -29,6 +30,7 @@ public class GroupDetailFragment extends Fragment {
 
     private LightViewModel lightViewModel;
     private View fragmentView;
+    private HueApiManager hueApiManager;
 
     public GroupDetailFragment() {
     }
@@ -40,14 +42,14 @@ public class GroupDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.lightViewModel = new ViewModelProvider(requireActivity()).get(LightViewModel.class);
+        this.hueApiManager = new HueApiManager(this.requireContext(), this.lightViewModel);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.fragmentView = inflater.inflate(R.layout.fragment_group_detail, container, false);
-
-        this.lightViewModel = new ViewModelProvider(requireActivity()).get(LightViewModel.class);
 
         CustomColors color = this.lightViewModel.getSelectedGroup().getColor();
         if(color != null) {
@@ -82,6 +84,7 @@ public class GroupDetailFragment extends Fragment {
                     onColorPicked(int color) {
                         fragmentView.findViewById(R.id.groupColorPreview).setBackgroundColor(color);
                         lightViewModel.getSelectedGroup().setColor(new CustomColors(color));
+                        hueApiManager.queueSetGroupColor(lightViewModel.getSelectedGroup(), lightViewModel.getSelectedGroup().getColor());
                         Log.i(LOGTAG, Integer.toHexString(color));
                         Log.i(LOGTAG, Integer.toBinaryString(color));
                     }
@@ -90,11 +93,13 @@ public class GroupDetailFragment extends Fragment {
 
     public void onToggleGroupPressed(View view) {
         Button toggleButton = view.findViewById(R.id.detailToggleGroupButton);
-        if (this.lightViewModel.getSelectedGroup().isOn()) {
+        boolean isOn = this.lightViewModel.getSelectedGroup().isOn();
+        if (isOn) {
             toggleButton.setText(R.string.TurnOn);
         } else {
             toggleButton.setText(R.string.TurnOff);
         }
-//        this.lightViewModel.getSelectedGroupLiveData().getValue().toggle();
+        this.lightViewModel.getSelectedGroup().setOn(!isOn);
+        this.hueApiManager.queueSetGroupState(this.lightViewModel.getSelectedGroup(), !isOn);
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leonv.hueapp.GroupItemRecyclerViewAdapter;
+import com.leonv.hueapp.HueApiManager;
 import com.leonv.hueapp.LightViewModel;
 import com.leonv.hueapp.OnItemClickListener;
 import com.leonv.hueapp.R;

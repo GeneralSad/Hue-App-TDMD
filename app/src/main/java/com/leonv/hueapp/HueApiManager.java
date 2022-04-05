@@ -24,21 +24,20 @@ public class HueApiManager {
 
     private static final String LOGTAG = HueApiManager.class.getName();
 
-    private AppCompatActivity context;
-    private RequestQueue requestQueue;
-    private LightViewModel lightViewModel;
+    private final Context context;
+    private final RequestQueue requestQueue;
+    private final LightViewModel lightViewModel;
     private String IP;
 
-    public HueApiManager(AppCompatActivity appContext) {
+    public HueApiManager(Context appContext, LightViewModel lightViewModel) {
         this.context = appContext;
         this.requestQueue = Volley.newRequestQueue(this.context);
-        this.lightViewModel = new ViewModelProvider(appContext).get(LightViewModel.class);
+        this.lightViewModel = lightViewModel;
         this.IP = getIPAddress();
     }
 
     public boolean isLinked(){
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.contains("username");
+        return isUserNameSet();
     }
 
     public void setLinked(boolean isLinkVisible) {
@@ -89,16 +88,34 @@ public class HueApiManager {
         this.requestQueue.add(setLightRequest(light, jsonObject));
     }
 
+    //Queue setLightState
+    public void queueSetGroupState(HueGroup group, boolean state) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("on", state);
+        } catch (JSONException e) {
+            Log.e(LOGTAG, e.getLocalizedMessage());
+        }
+        this.requestQueue.add(setGroupActionRequest(group, jsonObject));
+    }
+
+    //Queue setGroupActionRequest
+    public void queueSetGroupColor(HueGroup group, CustomColors customColor) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("hue", customColor.getHue() >= 65536 ? 65535 : customColor.getHue());
+            jsonObject.put("sat", (customColor.getSaturation() >= 255 ? 254 : customColor.getSaturation()));
+            jsonObject.put("bri", (customColor.getBrightness() >= 255 ? 254 : customColor.getBrightness()));
+        } catch (JSONException e) {
+            Log.e(LOGTAG, e.getLocalizedMessage());
+        }
+        this.requestQueue.add(setGroupActionRequest(group, jsonObject));
+    }
+
     private String getIPAddress()
     {
         SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return sharedPreferences.getString("IPAddress", "");
-    }
-
-    private void forgetUserName()
-    {
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
-        sharedPref.edit().remove("username").apply();
     }
 
 
@@ -175,7 +192,7 @@ public class HueApiManager {
 
     //Set the username and store it in SharedPreferences
     private void setUsername(String username) {
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("username", username);
         editor.apply();
@@ -185,15 +202,25 @@ public class HueApiManager {
 
     //Get the username from SharedPreferences
     private String getUsername() {
-        SharedPreferences sharedPref = this.context.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         if (!sharedPref.contains("username")) {
             Log.w(LOGTAG, "Username SharedPreference was empty, try to link again");
         }
 
-        String username = sharedPref.getString("username", "");
+        return sharedPref.getString("username", "");
+    }
 
-        return username;
+    private void forgetUserName()
+    {
+        SharedPreferences sharedPref = this.context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sharedPref.edit().remove("username").apply();
+    }
+
+    private boolean isUserNameSet()
+    {
+        SharedPreferences sharedPref = this.context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPref.contains("username");
     }
 
     //Get the address
@@ -287,6 +314,18 @@ public class HueApiManager {
         });
     }
 
+    private JsonRequest<JSONArray> setGroupActionRequest(HueGroup group, JSONObject requestData) {
+        final String url = getFullAddress() + "/groups/" + group.getId() + "/action";
+        Log.d(LOGTAG, "SetGroupActionUrl: " + url);
+
+        return new CustomJsonArrayRequest(Request.Method.PUT, url, requestData, response -> {
+            Log.i(LOGTAG, "Set Group action Response: " + response.toString());
+        }, error -> {
+            Log.e(LOGTAG, error.getLocalizedMessage());
+        });
+
+    }
+
     private void createHueGroups(JSONObject groups) {
 
         ArrayList<HueGroup> hueGroups = new ArrayList<>();
@@ -300,6 +339,7 @@ public class HueApiManager {
                 JSONObject group = groups.getJSONObject(groupId);
 
                 HueGroup hueGroup = new HueGroup();
+                hueGroup.setId(groupId);
 
                 String groupName = group.getString("name");
                 hueGroup.setName(groupName);

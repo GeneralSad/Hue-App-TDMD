@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.hueApiManager = new HueApiManager(this);
-
         this.lightViewModel = new ViewModelProvider(this).get(LightViewModel.class);
         this.lightViewModel.getSelected().observe(this, this::pressedLight);
         this.lightViewModel.getSelectedGroupLiveData().observe(this, this::pressedGroup);
+
+        this.hueApiManager = new HueApiManager(this, this.lightViewModel);
 
         this.fragmentManager = getSupportFragmentManager();
 

@@ -13,9 +13,12 @@ public class LightViewModel extends ViewModel implements OnItemClickListener {
 
     private final MutableLiveData<HueLight> selectedLight = new MutableLiveData<>();
     private final MutableLiveData<HueGroup> selectedGroup = new MutableLiveData<>();
+
     private final List<ItemAddedListener> listeners = new LinkedList<>();
+
     private final LightManager lightManager = new LightManager();
     private final GroupManager groupManager = new GroupManager();
+
     private final MutableLiveData<Boolean> isLinked = new MutableLiveData<>();
 
     private void notifyUpdatedListeners(int index) {
