@@ -19,7 +19,8 @@ public class LightManager {
     }
 
     public void setHueLights(ArrayList<HueLight> hueLights) {
-        this.hueLights = hueLights;
+        this.hueLights.clear();
+        this.hueLights.addAll(hueLights);
     }
 
     public void addHueLight(HueLight hueLight) {
